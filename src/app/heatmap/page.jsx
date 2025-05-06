@@ -1,9 +1,17 @@
-import PageLayout from '../../components/PageLayout';
+'use client';
 
-export default function MapPage() {
+
+import PageLayout from '../../components/PageLayout';
+import BaseMap from '../../components/MapContainer';
+// import HeatLayer from '@/components/HeatLayer'; // if separated
+
+export default function HeatmapPage() {
   return (
-    <PageLayout title="Map View">
-      <p>This is the map view. Crash locations will be plotted here soon.</p>
+    <PageLayout title="Heatmap View">
+      <BaseMap>
+        {/* Add heat layer or points here */}
+        {/* <HeatLayer /> */}
+      </BaseMap>
     </PageLayout>
   );
 }
