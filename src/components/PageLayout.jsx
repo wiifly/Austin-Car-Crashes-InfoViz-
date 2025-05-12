@@ -9,6 +9,7 @@ export default function PageLayout({ title, children }) {
         <ul className="flex space-x-4">
           <li><Link href="/">Home</Link></li>
           <li><Link href="/map">Map</Link></li>
+          <li><Link href="/bar">Bar</Link></li>
           <li><Link href="/heatmap">Heatmap</Link></li>
           <li><Link href="/trend">Trend Line</Link></li>
         </ul>
