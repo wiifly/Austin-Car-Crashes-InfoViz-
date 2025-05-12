@@ -22,21 +22,22 @@ const COLOR_SCHEMES = {
   injury: {
     // Color gradient based on injury count
     getColor: (injuryCount) => {
-      if (injuryCount === 0) return '#38a169'; // green for no injuries
-      if (injuryCount === 1) return '#ecc94b'; // yellow for 1 injury
-      if (injuryCount <= 3) return '#ed8936'; // orange for 2-3 injuries
+      if (injuryCount > -1) return '#38a169'; // green for no injuries
+      if (injuryCount > 1) return '#ecc94b'; // yellow for 1 injury
+      if (injuryCount > 3) return '#ed8936'; // orange for 2-3 injuries
       return '#e53e3e'; // red for 4+ injuries
     },
     getTooltip: (data) => {
       const injuries = data.injury_count;
-      return `${injuries} injury${injuries !== 1 ? 'ies' : ''}`;
+      tooltip
+      return `${injuries} injur${injuries !== 1 ? 'ies' : 'y'}`;
     }
   },
   fatality: {
     // Color gradient based on fatality count
     getColor: (fatalityCount) => {
-      if (fatalityCount === 0) return '#38a169'; // green for no fatalities
-      if (fatalityCount === 1) return '#ed8936'; // orange for 1 fatality
+      if (fatalityCount >-1) return '#38a169'; // green for no fatalities
+      if (fatalityCount > 1) return '#ed8936'; // orange for 1 fatality
       return '#e53e3e'; // red for 2+ fatalities
     },
     getTooltip: (data) => {
@@ -54,31 +55,7 @@ const COLOR_SCHEMES = {
     },
     getTooltip: (data) => `Cost: $${Math.round(data.cost).toLocaleString()}`
   },
-  // Vehicle type color schemes (binary - involved or not)
-  pedestrian: {
-    getColor: (hasPedestrian) => hasPedestrian ? '#e53e3e' : '#38a169',
-    getTooltip: (data) => data.has_pedestrian ? 'Pedestrian Involved' : 'No Pedestrian'
-  },
-  bicycle: {
-    getColor: (hasBicycle) => hasBicycle ? '#e53e3e' : '#38a169',
-    getTooltip: (data) => data.has_bicycle ? 'Bicycle Involved' : 'No Bicycle'
-  },
-  motorcycle: {
-    getColor: (hasMotorcycle) => hasMotorcycle ? '#e53e3e' : '#38a169',
-    getTooltip: (data) => data.has_motorcycle ? 'Motorcycle Involved' : 'No Motorcycle'
-  },
-  truck: {
-    getColor: (hasTruck) => hasTruck ? '#e53e3e' : '#38a169',
-    getTooltip: (data) => data.has_truck ? 'Truck Involved' : 'No Truck'
-  },
-  bus: {
-    getColor: (hasBus) => hasBus ? '#e53e3e' : '#38a169',
-    getTooltip: (data) => data.has_bus ? 'Bus Involved' : 'No Bus'
-  },
-  emergency: {
-    getColor: (hasEmergency) => hasEmergency ? '#e53e3e' : '#38a169',
-    getTooltip: (data) => data.has_emergency ? 'Emergency Vehicle Involved' : 'No Emergency Vehicle'
-  }
+
 };
 
 export default function PointMapLayer({ points, colorScheme = 'severity' }) {
@@ -98,25 +75,14 @@ export default function PointMapLayer({ points, colorScheme = 'severity' }) {
         }}
       >
         <Tooltip>
-          <div>
-            {colorStyle.getTooltip(data)}
-            {colorScheme !== 'cost' && (
-              <><br /><strong>Cost:</strong> ${Math.round(data.cost).toLocaleString()}</>
-            )}
-            {colorScheme === 'severity' && data.injury_count > 0 && (
-              <><br /><strong>Injuries:</strong> {data.injury_count}</>
-            )}
-            {colorScheme === 'severity' && data.fatality_count > 0 && (
-              <><br /><strong>Fatalities:</strong> {data.fatality_count}</>
-            )}
-            {colorScheme === 'injury' && data.fatality_count > 0 && (
-              <><br /><strong>Fatalities:</strong> {data.fatality_count}</>
-            )}
-            {colorScheme === 'fatality' && data.injury_count > 0 && (
-              <><br /><strong>Injuries:</strong> {data.injury_count}</>
-            )}
-          </div>
-        </Tooltip>
+            <div>
+                <strong>Injuries:</strong> {data.injury_count}<br />
+                <strong>Fatalities:</strong> {data.fatality_count}<br />
+                <strong>Cost:</strong> ${Math.round(data.cost).toLocaleString()}<br />
+                <strong>Severity:</strong> {data.severity}<br />
+                <strong>Units Involved:</strong> {data.units_involved || 'N/A'}
+            </div>
+            </Tooltip>
       </CircleMarker>
     );
   });

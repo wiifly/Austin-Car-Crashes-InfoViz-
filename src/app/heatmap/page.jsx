@@ -91,7 +91,7 @@ export default function HeatmapPage() {
       <BaseMap>
         <HeatmapLayer points={filteredPoints} />
 
-        {/* 🔴 Static top crash spots (always shown) */}
+        {/*  Static top crash spots (always shown) */}
         
         {selectedHour === 'all' && topSpots.map((spot, idx) => {
   const lat = parseFloat(spot.avg_lat);
