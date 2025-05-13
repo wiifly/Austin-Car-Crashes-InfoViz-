@@ -1,11 +1,10 @@
 'use client';
 
 import { CircleMarker, Tooltip } from 'react-leaflet';
+ 
 
-// Color schemes for different categories
 const COLOR_SCHEMES = {
   severity: {
-    // Color gradient based on severity score (injuries + fatalities*5)
     getColor: (severity) => {
       if (severity === 0) return '#38a169'; // green for no injuries/fatalities
       if (severity <= 2) return '#ecc94b'; // yellow for minor severity
@@ -19,24 +18,23 @@ const COLOR_SCHEMES = {
       return parts.length > 0 ? parts.join(', ') : 'No injuries or fatalities';
     }
   },
-  injury: {
+  injury_count: {
     // Color gradient based on injury count
-    getColor: (injuryCount) => {
-      if (injuryCount > -1) return '#38a169'; // green for no injuries
-      if (injuryCount > 1) return '#ecc94b'; // yellow for 1 injury
-      if (injuryCount > 3) return '#ed8936'; // orange for 2-3 injuries
+    getColor: (injury_count) => {
+      console.log(injury_count);
+      if (injury_count > -1) return '#38a169'; // green for no injuries
+      if (injury_count > 1) return '#ecc94b'; // yellow for 1 injury
+      if (injury_count > 3) return '#ed8936'; // orange for 2-3 injuries
       return '#e53e3e'; // red for 4+ injuries
     },
     getTooltip: (data) => {
-      const injuries = data.injury_count;
-      tooltip
-      return `${injuries} injur${injuries !== 1 ? 'ies' : 'y'}`;
+      return `${data.injury_count} injur${data.injury_count !== 1 ? 'ies' : 'y'}`;
     }
   },
-  fatality: {
+  fatality_count: {
     // Color gradient based on fatality count
-    getColor: (fatalityCount) => {
-      if (fatalityCount >-1) return '#38a169'; // green for no fatalities
+    getColor: (fatality_count) => {
+      if (fatality_count >-1) return '#38a169'; // green for no fatalities
       if (fatalityCount > 1) return '#ed8936'; // orange for 1 fatality
       return '#e53e3e'; // red for 2+ fatalities
     },

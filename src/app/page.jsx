@@ -3,9 +3,10 @@
 import { useEffect, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import PageLayout from '@/components/PageLayout';
-import MapLegend from '@/components/MapLegend';
+
 
 // Dynamic imports to avoid SSR issues with Leaflet
+const MapLegend = dynamic(() => import('@/components/MapLegend'), { ssr: false });
 const BaseMap = dynamic(() => import('@/components/MapContainer'), { ssr: false });
 const PointMapLayer = dynamic(() => import('@/components/PointMapLayer'), { ssr: false });
 
@@ -26,6 +27,8 @@ export default function MapLayer() {
   const [selectedHour, setSelectedHour] = useState('all');
   const [selectedSpeedLimit, setSelectedSpeedLimit] = useState('all');
   const [colorScheme, setColorScheme] = useState('cost');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFiltering, setIsFiltering] = useState(false);
 
 
   
@@ -38,6 +41,7 @@ export default function MapLayer() {
   // Load full crash dataset
   useEffect(() => {
     async function loadData() {
+      setIsLoading(true);
       try {
         console.log('Starting data load...');
         const response = await fetch('/data/Austin_crashes_20k_most_attributes.geojson');
@@ -111,12 +115,15 @@ export default function MapLayer() {
         console.error('Error loading data:', error);
       }
     }
+  setIsLoading(false);
 
     loadData();
   }, []);
 
   // Filter points by selected hour and speed group
   useEffect(() => {
+    setIsFiltering(true);  
+
     const filtered = allData
       .filter(d => {
         const hourMatch = selectedHour === 'all' || d.hour === selectedHour;
@@ -146,8 +153,20 @@ export default function MapLayer() {
           has_other: d.has_other
         }
       ]);
+        setIsFiltering(false);  
     setFilteredPoints(filtered);
   }, [allData, selectedHour, selectedSpeedLimit]);
+
+if (isLoading || isFiltering) {
+  return (
+    <PageLayout title="Loading...">
+      <div style={{ textAlign: 'center', padding: '2rem' }}>
+        <p>{isLoading ? 'Loading data, please wait...' : 'Applying filters, please wait...'}</p>
+        <div className="spinner" />
+      </div>
+    </PageLayout>
+  );
+}
 
   return (
     <PageLayout title="Individual Crash View">
@@ -242,7 +261,8 @@ export default function MapLayer() {
           </div>
         </div>
       </div>
-
+      
+  
       {/* Map Section */}
       <BaseMap>
         <PointMapLayer points={filteredPoints} colorScheme={colorScheme} />
