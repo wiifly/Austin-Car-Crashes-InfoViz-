@@ -157,16 +157,6 @@ export default function MapLayer() {
     setFilteredPoints(filtered);
   }, [allData, selectedHour, selectedSpeedLimit]);
 
-if (isLoading || isFiltering) {
-  return (
-    <PageLayout title="Loading...">
-      <div style={{ textAlign: 'center', padding: '2rem' }}>
-        <p>{isLoading ? 'Loading data, please wait...' : 'Applying filters, please wait...'}</p>
-        <div className="spinner" />
-      </div>
-    </PageLayout>
-  );
-}
 
   return (
     <PageLayout title="Individual Crash View">

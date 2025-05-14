@@ -18,26 +18,28 @@ const COLOR_SCHEMES = {
       return parts.length > 0 ? parts.join(', ') : 'No injuries or fatalities';
     }
   },
-  injury_count: {
+  injury: {
     // Color gradient based on injury count
     getColor: (injury_count) => {
-      console.log(injury_count);
-      if (injury_count > -1) return '#38a169'; // green for no injuries
-      if (injury_count > 1) return '#ecc94b'; // yellow for 1 injury
-      if (injury_count > 3) return '#ed8936'; // orange for 2-3 injuries
-      return '#e53e3e'; // red for 4+ injuries
-    },
+      if (injury_count === 0) return '#38a169';
+      if (injury_count <= 1) return '#ecc94b';
+      if (injury_count <= 3) return '#ed8936';
+      return '#e53e3e';
+    }
+    ,
     getTooltip: (data) => {
       return `${data.injury_count} injur${data.injury_count !== 1 ? 'ies' : 'y'}`;
     }
   },
-  fatality_count: {
+  fatality: {
     // Color gradient based on fatality count
-    getColor: (fatality_count) => {
-      if (fatality_count >-1) return '#38a169'; // green for no fatalities
-      if (fatalityCount > 1) return '#ed8936'; // orange for 1 fatality
-      return '#e53e3e'; // red for 2+ fatalities
-    },
+    getColor: (injury_count) => {
+      if (injury_count === 0) return '#38a169';
+      if (injury_count <= 1) return '#ecc94b';
+      if (injury_count <= 3) return '#ed8936';
+      return '#e53e3e';
+    }
+    ,
     getTooltip: (data) => {
       const fatalities = data.fatality_count;
       return fatalities > 0 ? `${fatalities} fatalit${fatalities !== 1 ? 'ies' : 'y'}` : 'No fatalities';
@@ -57,6 +59,7 @@ const COLOR_SCHEMES = {
 };
 
 export default function PointMapLayer({ points, colorScheme = 'severity' }) {
+
   return points.map((point, idx) => {
     const [lat, lng, data] = point;
     const colorStyle = COLOR_SCHEMES[colorScheme];
